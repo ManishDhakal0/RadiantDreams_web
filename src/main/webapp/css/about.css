@@ -1,0 +1,316 @@
+/* General */
+body {
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #ffffff;
+  color: #333333;
+  line-height: 1.5;
+}
+
+a {
+  text-decoration: none;
+  color: #0055a5;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: #003d7a;
+}
+
+h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+
+/* Header */
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  background-color: #ffffff;
+  box-shadow: 0px 1px 5px rgba(0,0,0,0.03);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: #0055a5;
+}
+
+.navigation a {
+  margin: 0 15px;
+  font-weight: 500;
+  font-size: 15px;
+  color: #555555;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.navigation a:hover {
+  color: #0055a5;
+}
+
+/* About Hero Section */
+.about-hero-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 40px;
+  background: #f8f9fa;
+}
+
+.about-hero-content {
+  max-width: 500px;
+}
+
+.about-hero-content h1 {
+  font-size: 42px;
+  margin-bottom: 20px;
+  font-weight: 300;
+  letter-spacing: 1px;
+  line-height: 1.2;
+  color: #333333;
+}
+
+.about-hero-content p {
+  font-size: 18px;
+  margin-bottom: 30px;
+  font-weight: 300;
+  color: #555555;
+}
+
+.about-hero-image img {
+  width: 400px;
+  margin-left: 50px;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+}
+
+/* About Mission Section */
+.about-mission {
+  padding: 80px 40px;
+  text-align: center;
+  background: #ffffff;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.about-mission p {
+  color: #555555;
+  font-size: 18px;
+  line-height: 1.8;
+}
+
+/* About Values Section */
+.about-values {
+  padding: 80px 40px;
+  background-color: #f8f9fa;
+}
+
+.values {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 40px;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.value {
+  background: #ffffff;
+  border-radius: 0;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  padding: 30px;
+  width: 280px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.value:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 20px rgba(0,0,0,0.1);
+}
+
+.value h3 {
+  font-size: 20px;
+  margin-bottom: 15px;
+  font-weight: 500;
+  color: #0055a5;
+}
+
+.value p {
+  color: #666666;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* About Team Section */
+.about-team {
+  padding: 80px 40px;
+  background: #ffffff;
+}
+
+.team-members {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 40px;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.team-member {
+  text-align: center;
+  width: 280px;
+  transition: transform 0.3s ease;
+}
+
+.team-member:hover {
+  transform: translateY(-5px);
+}
+
+.team-member img {
+  width: 100%;
+  border-radius: 0;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  margin-bottom: 15px;
+}
+
+.team-member h3 {
+  font-size: 18px;
+  margin: 10px 0 5px;
+  font-weight: 500;
+  color: #333333;
+}
+
+.team-member p {
+  color: #0055a5;
+  font-size: 14px;
+}
+
+/* About Commitment Section */
+.about-commitment {
+  padding: 80px 40px;
+  background-color: #f8f9fa;
+}
+
+.commitments {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 40px;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.commitment {
+  background: #ffffff;
+  border-radius: 0;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  padding: 30px;
+  width: 280px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.commitment:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 20px rgba(0,0,0,0.1);
+}
+
+.commitment h3 {
+  font-size: 18px;
+  margin-bottom: 15px;
+  font-weight: 500;
+  color: #0055a5;
+}
+
+.commitment p {
+  color: #666666;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* About Contact Section */
+.about-contact {
+  padding: 80px 40px;
+  text-align: center;
+  background: #ffffff;
+}
+
+.contact-info {
+  max-width: 500px;
+  margin: 30px auto 0;
+}
+
+.contact-info p {
+  margin-bottom: 10px;
+  color: #555555;
+  font-size: 16px;
+}
+
+/* Footer */
+.site-footer {
+  padding: 30px 20px;
+  text-align: center;
+  background: #333333;
+  color: #cccccc;
+  font-size: 14px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .about-hero-section {
+    flex-direction: column;
+    padding: 40px 20px;
+  }
+  
+  .about-hero-content {
+    text-align: center;
+  }
+  
+  .about-hero-image img {
+    margin-left: 0;
+    margin-top: 30px;
+    max-width: 90%;
+  }
+  
+  .site-header {
+    padding: 15px 20px;
+    flex-direction: column;
+  }
+  
+  .navigation {
+    margin-top: 15px;
+  }
+  
+  .navigation a {
+    margin: 0 10px;
+    font-size: 14px;
+  }
+  
+  .about-mission,
+  .about-values,
+  .about-team,
+  .about-commitment,
+  .about-contact {
+    padding: 60px 20px;
+  }
+  
+  .value,
+  .team-member,
+  .commitment {
+    width: 100%;
+    max-width: 300px;
+  }
+}

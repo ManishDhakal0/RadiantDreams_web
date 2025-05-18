@@ -9,6 +9,7 @@ import java.util.List;
 
 public class ProductManagementService {
 
+    // Retrieve all products from DB
     public List<ProductModel> getAllProducts() {
         List<ProductModel> productList = new ArrayList<>();
         String query = "SELECT * FROM product";
@@ -36,6 +37,7 @@ public class ProductManagementService {
         return productList;
     }
 
+    // Add a new product to DB
     public boolean addProduct(ProductModel product) {
         String query = "INSERT INTO product (name, description, price, category, availability, image_url, quantity) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
@@ -50,7 +52,7 @@ public class ProductManagementService {
             stmt.setString(6, product.getImageUrl());
             stmt.setInt(7, product.getQuantity());
 
-            return stmt.executeUpdate() > 0;
+            return stmt.executeUpdate() > 0; // Check success
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -58,6 +60,7 @@ public class ProductManagementService {
         return false;
     }
 
+    // Delete product by ID
     public boolean deleteProduct(int id) {
         String query = "DELETE FROM product WHERE id = ?";
 
@@ -66,19 +69,23 @@ public class ProductManagementService {
 
             stmt.setInt(1, id);
             return stmt.executeUpdate() > 0;
-
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
         return false;
     }
+
+    // Get product details by ID
     public ProductModel getProductById(int id) {
         String query = "SELECT * FROM product WHERE id = ?";
+
         try (Connection conn = DBConfig.getDbConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
+
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
+
             if (rs.next()) {
                 ProductModel p = new ProductModel();
                 p.setId(rs.getInt("id"));
@@ -94,11 +101,16 @@ public class ProductManagementService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return null;
     }
+
+    // Update product details
     public boolean updateProduct(ProductModel product) {
+        // Append image_url only if it's not null
         String query = "UPDATE product SET name=?, description=?, price=?, category=?, availability=?, quantity=?" +
                 (product.getImageUrl() != null ? ", image_url=?" : "") + " WHERE id=?";
+
         try (Connection conn = DBConfig.getDbConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
@@ -115,6 +127,7 @@ public class ProductManagementService {
             } else {
                 stmt.setInt(7, product.getId());
             }
+
             return stmt.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();
@@ -122,7 +135,8 @@ public class ProductManagementService {
 
         return false;
     }
-    
+
+    // Search products by keyword
     public List<ProductModel> searchProducts(String search) {
         List<ProductModel> productList = new ArrayList<>();
         String query = "SELECT * FROM product WHERE name LIKE ? OR description LIKE ? OR category LIKE ?";
@@ -149,13 +163,10 @@ public class ProductManagementService {
                 p.setQuantity(rs.getInt("quantity"));
                 productList.add(p);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         return productList;
     }
-
-
 }

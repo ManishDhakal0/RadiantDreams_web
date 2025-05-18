@@ -9,24 +9,23 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Servlet implementation class HomeController
+ * Handles redirection to home page for logged-in non-admin users.
  */
-@WebServlet(asyncSupported =true,urlPatterns ={"/home"})
+@WebServlet(asyncSupported = true, urlPatterns = {"/home"})
 public class HomeController extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
+    private static final long serialVersionUID = 1L;
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    String username = (String) request.getSession().getAttribute("username");
+    /**
+     * If user is logged in, forward to home.jsp.
+     * Otherwise, redirect to login page.
+     */
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String username = (String) request.getSession().getAttribute("username");
 
-	    if (username == null) {
-	        response.sendRedirect("login");
-	    } else {
-	        request.getRequestDispatcher("/WEB-INF/pages/home.jsp").forward(request, response);
-	    }
-	}
-
-
-
-
+        if (username == null) {
+            response.sendRedirect("login");
+        } else {
+            request.getRequestDispatcher("/WEB-INF/pages/home.jsp").forward(request, response);
+        }
+    }
 }

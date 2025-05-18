@@ -10,35 +10,35 @@ public class SessionUtil {
 
     /**
      * Stores a value in the session under the specified key.
+     * Sets the session timeout to 5 minutes (300 seconds).
      *
      * @param request HttpServletRequest object
-     * @param key     the attribute key
-     * @param value   the value to store
+     * @param key     the attribute key to store
+     * @param value   the value to store in session
      */
-	public static void setAttribute(HttpServletRequest request, String key, Object value) {
-	    HttpSession session = request.getSession();
-	    session.setMaxInactiveInterval(300); // Set session timeout to 300 seconds (5 minutes)
-	    session.setAttribute(key, value);
-	}
-
+    public static void setAttribute(HttpServletRequest request, String key, Object value) {
+        HttpSession session = request.getSession();
+        session.setMaxInactiveInterval(300); // 5 minutes timeout
+        session.setAttribute(key, value);
+    }
 
     /**
-     * Retrieves a value from the session.
+     * Retrieves a value from the session by key.
      *
      * @param request HttpServletRequest object
-     * @param key     the key of the attribute
-     * @return the value stored in session or null if not found
+     * @param key     the attribute key to retrieve
+     * @return the value stored in session or null if none exists
      */
     public static Object getAttribute(HttpServletRequest request, String key) {
-        HttpSession session = request.getSession(false);
+        HttpSession session = request.getSession(false);  // false = don't create session if not exist
         return (session != null) ? session.getAttribute(key) : null;
     }
 
     /**
-     * Removes a value from the session.
+     * Removes a value from the session by key.
      *
      * @param request HttpServletRequest object
-     * @param key     the key of the attribute to remove
+     * @param key     the attribute key to remove
      */
     public static void removeAttribute(HttpServletRequest request, String key) {
         HttpSession session = request.getSession(false);
@@ -48,7 +48,7 @@ public class SessionUtil {
     }
 
     /**
-     * Invalidates the current session.
+     * Invalidates the current session, logging the user out.
      *
      * @param request HttpServletRequest object
      */
@@ -58,4 +58,4 @@ public class SessionUtil {
             session.invalidate();
         }
     }
-} 
+}

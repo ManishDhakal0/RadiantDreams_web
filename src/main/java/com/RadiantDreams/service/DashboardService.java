@@ -8,10 +8,12 @@ import java.util.*;
 
 public class DashboardService {
 
+    // Helper method to get DB connection
     private Connection getConnection() throws SQLException, ClassNotFoundException {
         return DBConfig.getDbConnection();
     }
 
+    // Returns total number of customers
     public int getTotalCustomers() {
         String query = "SELECT COUNT(*) FROM customer";
         try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -23,6 +25,7 @@ public class DashboardService {
         return 0;
     }
 
+    // Returns total number of orders
     public int getTotalOrders() {
         String query = "SELECT COUNT(*) FROM orders";
         try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -34,6 +37,7 @@ public class DashboardService {
         return 0;
     }
 
+    // Returns total revenue generated
     public double getTotalRevenue() {
         String query = "SELECT SUM(p.price * od.quantity) " +
                        "FROM order_details od JOIN product p ON od.product_id = p.id";
@@ -46,6 +50,7 @@ public class DashboardService {
         return 0.0;
     }
 
+    // Retrieves the 5 most recent orders
     public List<OrderModel> getRecentOrders() {
         List<OrderModel> orders = new ArrayList<>();
         String query = "SELECT * FROM orders ORDER BY order_date DESC LIMIT 5";
@@ -64,7 +69,7 @@ public class DashboardService {
         return orders;
     }
 
-
+    // Retrieves 5 latest customers by ID
     public List<CustomerModel> getLatestCustomers() {
         List<CustomerModel> customers = new ArrayList<>();
         String query = "SELECT * FROM customer ORDER BY id DESC LIMIT 5";
@@ -90,6 +95,8 @@ public class DashboardService {
         }
         return customers;
     }
+
+    // Retrieves top 5 selling products based on quantity sold
     public List<ProductModel> getTopSellingProducts() {
         List<ProductModel> topProducts = new ArrayList<>();
         String query = "SELECT p.id, p.name, SUM(od.quantity) AS total_sold " +
@@ -104,7 +111,7 @@ public class DashboardService {
                 ProductModel product = new ProductModel();
                 product.setId(rs.getInt("id"));
                 product.setName(rs.getString("name"));
-                product.setQuantity(rs.getInt("total_sold")); // Reusing `quantity` field to hold total sold
+                product.setQuantity(rs.getInt("total_sold")); // Using quantity field for display
                 topProducts.add(product);
             }
         } catch (SQLException | ClassNotFoundException e) {
@@ -112,7 +119,8 @@ public class DashboardService {
         }
         return topProducts;
     }
-    // Get order counts per status
+
+    // Returns count of orders grouped by status
     public Map<String, Integer> getOrderStatusCounts() {
         Map<String, Integer> statusMap = new LinkedHashMap<>();
         String query = "SELECT status, COUNT(*) AS count FROM order_details GROUP BY status";
@@ -126,7 +134,4 @@ public class DashboardService {
         }
         return statusMap;
     }
-
-
-
 }

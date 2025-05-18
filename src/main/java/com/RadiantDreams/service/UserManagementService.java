@@ -10,6 +10,7 @@ import java.util.List;
 
 public class UserManagementService {
 
+    // Get all users
     public List<CustomerModel> getAllUsers() {
         List<CustomerModel> users = new ArrayList<>();
         String query = "SELECT * FROM customer";
@@ -19,9 +20,8 @@ public class UserManagementService {
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                users.add(extractUser(rs));
+                users.add(extractUser(rs)); // Reuse method for mapping
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -29,6 +29,7 @@ public class UserManagementService {
         return users;
     }
 
+    // Delete user by ID
     public boolean deleteUser(int id) {
         String query = "DELETE FROM customer WHERE id = ?";
 
@@ -37,7 +38,6 @@ public class UserManagementService {
 
             stmt.setInt(1, id);
             return stmt.executeUpdate() > 0;
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -45,6 +45,7 @@ public class UserManagementService {
         return false;
     }
 
+    // Helper to map ResultSet to CustomerModel
     private CustomerModel extractUser(ResultSet rs) throws SQLException {
         return new CustomerModel(
             rs.getInt("id"),

@@ -18,11 +18,12 @@ import java.util.List;
 public class ProductManagementController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private ProductManagementService productmanagementService = new ProductManagementService();
-    private ImageUtil imageUtil = new ImageUtil();
+    private ImageUtil imageUtil = new ImageUtil(); // Utility for handling image uploads
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        // Access control: only admins allowed
         String username = (String) request.getSession().getAttribute("username");
         String role = (String) request.getSession().getAttribute("role");
 
@@ -31,6 +32,7 @@ public class ProductManagementController extends HttpServlet {
             return;
         }
 
+        // Handle product deletion
         if (request.getParameter("delete") != null) {
             int id = Integer.parseInt(request.getParameter("delete"));
             productmanagementService.deleteProduct(id);
@@ -38,12 +40,14 @@ public class ProductManagementController extends HttpServlet {
             return;
         }
 
+        // Handle product edit - fetch existing data
         if (request.getParameter("edit") != null) {
             int id = Integer.parseInt(request.getParameter("edit"));
             ProductModel product = productmanagementService.getProductById(id);
             request.setAttribute("editProduct", product);
         }
 
+        // Handle product search/filter
         String searchTerm = request.getParameter("search");
         List<ProductModel> products;
 
@@ -53,10 +57,10 @@ public class ProductManagementController extends HttpServlet {
             products = productmanagementService.getAllProducts();
         }
 
+        // Set attributes for JSP
         request.setAttribute("products", products);
         request.getRequestDispatcher("/WEB-INF/pages/productsmanagement.jsp").forward(request, response);
     }
-
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -65,11 +69,13 @@ public class ProductManagementController extends HttpServlet {
         Part imagePart = request.getPart("image");
         String imageUrl = null;
 
+        // Upload image if provided
         if (imagePart != null && imagePart.getSize() > 0) {
             String imageName = imageUtil.uploadImage(imagePart, "profiles", request);
             imageUrl = imageUtil.getImageWebPath("profiles", imageName);
         }
 
+        // Collect form data into ProductModel
         ProductModel product = new ProductModel();
         product.setId(id);
         product.setName(request.getParameter("name"));
@@ -80,12 +86,14 @@ public class ProductManagementController extends HttpServlet {
         product.setAvailability("on".equals(request.getParameter("availability")));
         if (imageUrl != null) product.setImageUrl(imageUrl);
 
+        // Determine if it's an update or a new addition
         if (id > 0) {
             productmanagementService.updateProduct(product);
         } else {
             productmanagementService.addProduct(product);
         }
 
-        response.sendRedirect("productsmanagement");
+        response.sendRedirect("productsmanagement"); // Redirect back to admin panel
     }
 }
+

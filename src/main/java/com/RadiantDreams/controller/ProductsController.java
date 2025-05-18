@@ -9,6 +9,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.util.List;
+
 @WebServlet("/products")
 public class ProductsController extends HttpServlet {
     private static final long serialVersionUID = 1L;

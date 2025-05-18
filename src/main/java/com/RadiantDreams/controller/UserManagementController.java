@@ -16,20 +16,20 @@ public class UserManagementController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+    	// Ensure only admin can access
         String role = (String) request.getSession().getAttribute("role");
         if (role == null || !role.equalsIgnoreCase("admin")) {
             response.sendRedirect("login");
             return;
         }
-
+     // Handle user deletion
         String deleteId = request.getParameter("delete");
         if (deleteId != null) {
             userService.deleteUser(Integer.parseInt(deleteId));
             response.sendRedirect("users");
             return;
         }
-
+     // Fetch and display all users
         List<CustomerModel> users = userService.getAllUsers();
         request.setAttribute("userList", users);
         request.setAttribute("totalUsers", users.size());

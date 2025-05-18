@@ -11,13 +11,14 @@ import java.util.List;
 
 public class OrderService {
 
+    // Handles placing a new order, inserting order & details, and updating stock
     public void placeOrder(String username, int productId, int quantity) {
         String orderQuery = "INSERT INTO orders (customer_username) VALUES (?)";
         String detailQuery = "INSERT INTO order_details (order_id, product_id, quantity, status) VALUES (?, ?, ?, 'Pending')";
         String updateStockQuery = "UPDATE product SET quantity = quantity - ? WHERE id = ? AND quantity >= ?";
 
         try (Connection conn = DBConfig.getDbConnection()) {
-            conn.setAutoCommit(false);
+            conn.setAutoCommit(false); // Begin transaction
 
             try (PreparedStatement orderStmt = conn.prepareStatement(orderQuery, Statement.RETURN_GENERATED_KEYS)) {
                 orderStmt.setString(1, username);
@@ -41,15 +42,15 @@ public class OrderService {
                         int affected = updateStockStmt.executeUpdate();
 
                         if (affected == 0) {
-                            conn.rollback();
+                            conn.rollback(); // Rollback if stock insufficient
                             throw new SQLException("Not enough stock or invalid product.");
                         }
 
-                        conn.commit();
+                        conn.commit(); // Commit successful transaction
                     }
                 }
             } catch (Exception e) {
-                conn.rollback();
+                conn.rollback(); // Rollback on error
                 throw e;
             }
 
@@ -58,10 +59,12 @@ public class OrderService {
         }
     }
 
+    // Retrieves all orders with their corresponding order details
     public List<OrderModel> getAllOrdersWithDetails() {
         List<OrderModel> orders = new ArrayList<>();
         String orderQuery = "SELECT * FROM orders ORDER BY order_date DESC";
         String detailsQuery = "SELECT od.*, p.name, p.price, p.image_url FROM order_details od JOIN product p ON od.product_id = p.id WHERE od.order_id = ?";
+
         try (Connection conn = DBConfig.getDbConnection();
              PreparedStatement orderStmt = conn.prepareStatement(orderQuery);
              ResultSet orderRs = orderStmt.executeQuery()) {
@@ -77,20 +80,19 @@ public class OrderService {
                     ResultSet detailsRs = detailsStmt.executeQuery();
 
                     List<OrderDetailModel> details = new ArrayList<>();
-
                     while (detailsRs.next()) {
                         OrderDetailModel detail = new OrderDetailModel();
                         detail.setId(detailsRs.getInt("id"));
                         detail.setOrderId(detailsRs.getInt("order_id"));
                         detail.setProductId(detailsRs.getInt("product_id"));
                         detail.setQuantity(detailsRs.getInt("quantity"));
-                        detail.setStatus(detailsRs.getString("status")); // ← correct placement
+                        detail.setStatus(detailsRs.getString("status")); // Status of individual item
 
                         ProductModel product = new ProductModel();
                         product.setId(detailsRs.getInt("product_id"));
                         product.setName(detailsRs.getString("name"));
                         product.setPrice(detailsRs.getDouble("price"));
-                        product.setImageUrl(detailsRs.getString("image_url")); // optional
+                        product.setImageUrl(detailsRs.getString("image_url"));
 
                         detail.setProduct(product);
                         details.add(detail);
@@ -109,6 +111,8 @@ public class OrderService {
 
         return orders;
     }
+
+    // Updates the status of an individual order detail
     public void updateOrderDetailStatus(int orderDetailId, String newStatus) {
         String sql = "UPDATE order_details SET status = ? WHERE id = ?";
 

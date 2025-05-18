@@ -10,7 +10,10 @@ import com.RadiantDreams.service.LoginService;
 import com.RadiantDreams.util.CookieUtil;
 import com.RadiantDreams.util.SessionUtil;
 
-@WebServlet(asyncSupported = true, urlPatterns = {"/login","/"})
+/**
+ * Handles login functionality for both admin and user roles.
+ */
+@WebServlet(asyncSupported = true, urlPatterns = {"/login", "/"})
 public class LoginController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private LoginService loginService;
@@ -18,24 +21,33 @@ public class LoginController extends HttpServlet {
     public LoginController() {
         this.loginService = new LoginService();
     }
+
+    /**
+     * Displays login form when user accesses the login page.
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("doGet called for /login");
         request.getRequestDispatcher("/WEB-INF/pages/login.jsp").forward(request, response);
     }
+
+    /**
+     * Processes login credentials.
+     * Sets session attributes and redirects based on user role.
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        String role = request.getParameter("role"); //role from dropdown
+        String role = request.getParameter("role");
 
         Boolean loginStatus = loginService.loginUser(username, password, role);
 
         if (loginStatus != null && loginStatus) {
+            // Set session attributes and role-based cookies
             SessionUtil.setAttribute(request, "username", username);
             SessionUtil.setAttribute(request, "role", role);
+            CookieUtil.addCookie(response, "role", role, 5 * 60); // 5 minutes expiry
 
-            CookieUtil.addCookie(response, "role", role, 5 * 60);
-
-            
+            // Redirect based on role
             if ("admin".equalsIgnoreCase(role)) {
                 response.sendRedirect(request.getContextPath() + "/dashboard");
             } else {
@@ -45,7 +57,10 @@ public class LoginController extends HttpServlet {
             handleLoginFailure(request, response, loginStatus);
         }
     }
- 
+
+    /**
+     * Displays error messages for login failure.
+     */
     private void handleLoginFailure(HttpServletRequest req, HttpServletResponse resp, Boolean loginStatus)
             throws ServletException, IOException {
         String errorMessage;
@@ -57,5 +72,4 @@ public class LoginController extends HttpServlet {
         req.setAttribute("errorMsg", errorMessage); 
         req.getRequestDispatcher("/WEB-INF/pages/login.jsp").forward(req, resp);
     }
-
 }

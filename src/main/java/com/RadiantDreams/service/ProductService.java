@@ -13,6 +13,7 @@ import java.util.List;
 
 public class ProductService {
 
+    // Get all products
     public List<ProductModel> getAllProducts() {
         List<ProductModel> products = new ArrayList<>();
         String query = "SELECT * FROM product";
@@ -31,10 +32,8 @@ public class ProductService {
                 product.setAvailability(rs.getBoolean("availability"));
                 product.setImageUrl(rs.getString("image_url"));
                 product.setQuantity(rs.getInt("quantity"));
-
                 products.add(product);
             }
-
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -42,6 +41,7 @@ public class ProductService {
         return products;
     }
 
+    // Get product by ID
     public ProductModel getProductById(int id) {
         String query = "SELECT * FROM product WHERE id = ?";
 
@@ -63,7 +63,6 @@ public class ProductService {
                 product.setQuantity(rs.getInt("quantity"));
                 return product;
             }
-
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -71,6 +70,7 @@ public class ProductService {
         return null;
     }
 
+    // Get all products by a category
     public List<ProductModel> getProductsByCategory(String category) {
         List<ProductModel> products = new ArrayList<>();
         String query = "SELECT * FROM product WHERE category = ?";
@@ -91,10 +91,8 @@ public class ProductService {
                 product.setAvailability(rs.getBoolean("availability"));
                 product.setImageUrl(rs.getString("image_url"));
                 product.setQuantity(rs.getInt("quantity"));
-
                 products.add(product);
             }
-
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -102,6 +100,7 @@ public class ProductService {
         return products;
     }
 
+    // Decrease product quantity by 1
     public static boolean decreaseQuantity(int productId) {
         String query = "UPDATE product SET quantity = quantity - 1 WHERE id = ? AND quantity > 0";
 
@@ -109,10 +108,7 @@ public class ProductService {
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setInt(1, productId);
-            int rowsUpdated = stmt.executeUpdate();
-
-            return rowsUpdated > 0;
-
+            return stmt.executeUpdate() > 0;
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }

@@ -1,4 +1,5 @@
 package com.RadiantDreams.service;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,6 +13,7 @@ public class LoginService {
     private Connection dbConn;
     private boolean isConnectionError = false;
 
+    // Constructor attempts DB connection
     public LoginService() {
         try {
             dbConn = DBConfig.getDbConnection();
@@ -23,6 +25,7 @@ public class LoginService {
         }
     }
 
+    // Authenticates user based on role (admin vs customer)
     public Boolean loginUser(String username, String password, String role) {
         if ("admin".equalsIgnoreCase(role)) {
             return "admin".equals(username) && "admin123".equals(password);
@@ -43,7 +46,7 @@ public class LoginService {
                 String dbUsername = result.getString("username");
                 String dbEncryptedPassword = result.getString("password");
 
-                //Decrypt the password here
+                // Decrypt the password using utility
                 String decryptedPassword = PasswordUtil.decrypt(dbEncryptedPassword, dbUsername);
 
                 return dbUsername.equals(username) && decryptedPassword.equals(password);

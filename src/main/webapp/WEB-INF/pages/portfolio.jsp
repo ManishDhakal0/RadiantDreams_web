@@ -25,7 +25,7 @@
         <div class="profile-header">
           <h2>Account Information</h2>
           <a href="${pageContext.request.contextPath}/updatePortfolio" class="edit-button">
-            <img src="${pageContext.request.contextPath}/resources/images/editIcon.png" alt="Edit" class="edit-icon">
+            <img src="${pageContext.request.contextPath}/resources/images/edit.jpg" alt="Edit" class="edit-icon">
             <span>Edit Profile</span>
           </a>
         </div>
@@ -37,7 +37,7 @@
                 <img class="profile-image" src="${pageContext.request.contextPath}${customer.image}" alt="Profile Image">
               </c:when>
               <c:otherwise>
-                <img class="profile-image" src="${pageContext.request.contextPath}/resources/images/default.png" alt="Default Profile Image">
+                <img class="profile-image" src="${pageContext.request.contextPath}/resources/images/user.png" alt="Default Profile Image">
               </c:otherwise>
             </c:choose>
           </div>

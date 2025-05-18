@@ -13,6 +13,10 @@ import com.RadiantDreams.model.ProductModel;
 import com.RadiantDreams.model.CustomerModel;
 import com.RadiantDreams.service.DashboardService;
 
+/**
+ * Handles admin dashboard functionalities.
+ * Retrieves metrics and summary data to display on the admin dashboard.
+ */
 @WebServlet("/dashboard")
 public class DashboardController extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -21,6 +25,10 @@ public class DashboardController extends HttpServlet {
         super();
     }
 
+    /**
+     * Handles GET requests to /dashboard.
+     * Verifies admin session and retrieves dashboard data using DashboardService.
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -31,19 +39,20 @@ public class DashboardController extends HttpServlet {
             String username = (String) session.getAttribute("username");
             String role = (String) session.getAttribute("role");
 
+            // Only allow access if user is admin
             if (username != null && "admin".equalsIgnoreCase(role)) {
                 DashboardService dashboardService = new DashboardService();
 
+                // Fetch summary statistics and lists for dashboard
                 int totalCustomers = dashboardService.getTotalCustomers();
                 int totalOrders = dashboardService.getTotalOrders();
                 double totalRevenue = dashboardService.getTotalRevenue();
                 List<OrderModel> recentOrders = dashboardService.getRecentOrders();
                 List<CustomerModel> latestCustomers = dashboardService.getLatestCustomers();
                 List<ProductModel> topProducts = dashboardService.getTopSellingProducts();
-               
-
                 Map<String, Integer> orderStatuses = dashboardService.getOrderStatusCounts();
 
+                // Pass data to the JSP page
                 request.setAttribute("totalCustomers", totalCustomers);
                 request.setAttribute("totalOrders", totalOrders);
                 request.setAttribute("totalRevenue", totalRevenue);
@@ -57,13 +66,17 @@ public class DashboardController extends HttpServlet {
             }
         }
 
+        // Redirect to login if not authorized
         response.sendRedirect(request.getContextPath() + "/login");
     }
 
+    /**
+     * Redirects POST requests back to dashboard.
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // No POST operations currently
         response.sendRedirect(request.getContextPath() + "/dashboard");
     }
 }
+

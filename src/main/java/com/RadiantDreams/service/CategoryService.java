@@ -9,6 +9,7 @@ import java.util.List;
 
 public class CategoryService {
 
+    // Retrieves all categories from the 'category' table
     public List<CategoryModel> getAllCategories() {
         List<CategoryModel> categories = new ArrayList<>();
         String query = "SELECT * FROM category";
@@ -17,6 +18,7 @@ public class CategoryService {
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
 
+            // Map each result row to a CategoryModel object
             while (rs.next()) {
                 CategoryModel category = new CategoryModel();
                 category.setId(rs.getInt("id"));
@@ -25,7 +27,7 @@ public class CategoryService {
             }
 
         } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
+            e.printStackTrace(); // Log DB connection or query issues
         }
 
         return categories;

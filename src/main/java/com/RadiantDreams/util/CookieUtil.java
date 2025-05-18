@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 
 /**
- * Utility class for managing cookies in the Chapou web application.
+ * Utility class for managing cookies in the RadiantDreams web application.
  */
 public class CookieUtil {
 
@@ -22,7 +22,7 @@ public class CookieUtil {
     public static void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
         Cookie cookie = new Cookie(name, value);
         cookie.setMaxAge(maxAge);
-        cookie.setPath("/");
+        cookie.setPath("/");  // Make cookie accessible throughout the site
         response.addCookie(cookie);
     }
 
@@ -35,24 +35,25 @@ public class CookieUtil {
      */
     public static Cookie getCookie(HttpServletRequest request, String name) {
         if (request.getCookies() != null) {
+            // Stream through cookies and find the first with matching name
             return Arrays.stream(request.getCookies())
                     .filter(cookie -> name.equals(cookie.getName()))
                     .findFirst()
                     .orElse(null);
         }
-        return null;
+        return null; // No cookies present in request
     }
 
     /**
-     * Deletes a cookie by name.
+     * Deletes a cookie by name by setting max age to 0 (expire immediately).
      *
      * @param response the HttpServletResponse to send the removal cookie
      * @param name     the name of the cookie to remove
      */
     public static void deleteCookie(HttpServletResponse response, String name) {
         Cookie cookie = new Cookie(name, null);
-        cookie.setMaxAge(0);
-        cookie.setPath("/");
+        cookie.setMaxAge(0);  // Expire the cookie immediately
+        cookie.setPath("/");  // Path must match original cookie path
         response.addCookie(cookie);
     }
 }

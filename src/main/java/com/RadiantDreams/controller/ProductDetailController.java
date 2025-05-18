@@ -15,31 +15,29 @@ public class ProductDetailController extends HttpServlet {
     private ProductService productService;
 
     public ProductDetailController() {
-        productService = new ProductService();
+        productService = new ProductService(); // Service to handle product-related DB logic
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String idParam = request.getParameter("id");
+        String idParam = request.getParameter("id"); // Get product ID from query parameter
 
         if (idParam != null) {
             try {
-                int productId = Integer.parseInt(idParam);
-                ProductModel product = productService.getProductById(productId); 
-
-
+                int productId = Integer.parseInt(idParam); // Parse ID to integer
+                ProductModel product = productService.getProductById(productId); // Fetch product from DB
 
                 if (product != null) {
-                    request.setAttribute("product", product);
+                    request.setAttribute("product", product); // Set product for view rendering
                     request.getRequestDispatcher("/WEB-INF/pages/product-detail.jsp").forward(request, response);
                     return;
                 }
             } catch (NumberFormatException e) {
-                e.printStackTrace();
+                e.printStackTrace(); // Log invalid ID format
             }
         }
 
-        response.sendRedirect(request.getContextPath() + "/products");
+        response.sendRedirect(request.getContextPath() + "/products"); // Redirect to product listing if error
     }
 }
